@@ -8,10 +8,11 @@ if (NOT CAMERA_LIBS)
 endif()
 
 set(SOURCE_FILES
-  camera_listener.cc
+  snapdragon_camera_listener.cc
   frame_output_manager.cc
   image_saver.cc
   metadata_logger.cc
+  snapdragon_camera.cc
 )
 
 add_library(${TARGET} STATIC ${SOURCE_FILES})

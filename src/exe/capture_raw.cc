@@ -3,13 +3,15 @@
 #include <cstdlib>
 #include <unistd.h>
 #include <csignal>
+#include <thread>
 
 #include "boost/program_options.hpp" 
 #include "odometry_subscriber_node.h"
-#include "camera_listener.h"
+#include "snapdragon_camera_listener.h"
 #include "frame_output_manager.h"
 #include "image_saver.h"
 #include "metadata_logger.h"
+#include "snapdragon_camera.h"
 
 using namespace snap_cam;
 
@@ -85,11 +87,44 @@ Usage)V0G0N");
 
   auto image_saver = std::make_shared<ImageSaver>(ImageSaver::Options());
 
-  CameraListener::Options camera_listener_options;
+  SnapdragonCameraListener::Options camera_listener_options;
   camera_listener_options.frame_output_manager = frame_output_manager;
   camera_listener_options.image_saver = image_saver;
-  auto camera_listener = std::make_shared<CameraListener>(camera_listener_options);
+  auto camera_listener = std::make_shared<SnapdragonCameraListener>(camera_listener_options);
 
+  SnapdragonCamera::Options camera_options;
+  camera_options.camera_listener = camera_listener;
+  camera_options.camera_id = SnapdragonCamera::CameraID::FORWARD;
+  auto camera = std::make_shared<SnapdragonCamera>(camera_options);
+
+  // Start the camera
+  std::thread camera_thread([&](){ camera->Start(); });
+
+  // Kill program thread. This thread sleeps for a bit and then checks if the
+  // 'kill_program' variable has been set. If it has, it shuts ros down and
+  // sends stop signals to any other threads that might be running.
+  std::thread kill_thread(
+      [&]() {
+        while(true) {
+          if(true == kill_program) {
+            break;
+          } else {
+            std::this_thread::sleep_for(std::chrono::milliseconds(50));
+          }
+        }
+        std::cout << "Killing the program..." << std::endl;
+        camera->Stop();
+        ros::shutdown();
+      });
+
+  // Spin for ros subscribers
+  ros::spin();
+
+  // Wait for program termination via ctl-c
+  kill_thread.join();
+
+  // Wait for other threads to die
+  camera_thread.join();
 
   return EXIT_SUCCESS;
 }

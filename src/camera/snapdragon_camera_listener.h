@@ -1,6 +1,5 @@
 // Author: Tucker Haydon
 
-// #include <camera_parameters.h>
 #include <camera.h>
 #include <memory>
 #include <atomic>
@@ -9,10 +8,10 @@
 #include "image_saver.h"
 
 namespace snap_cam {
-  // Implementation of a camera::ICameraListener interface. Upon receipt of a
-  // frame, the CameraListener logs the most recent odometry data and saves the
+  // Implementation of a camera::ISnapdragonCameraListener interface. Upon receipt of a
+  // frame, the SnapdragonCameraListener logs the most recent odometry data and saves the
   // raw image to disk.
-  class CameraListener : public camera::ICameraListener {
+  class SnapdragonCameraListener : public camera::ICameraListener {
     public:
       // Options to configure this class
       struct Options {
@@ -27,10 +26,10 @@ namespace snap_cam {
       };
 
       // Constructor
-      CameraListener(const Options& options)
+      SnapdragonCameraListener(const Options& options)
         : options_(options) { this->options_.Check(); }
 
-      // Virtual functions from ICameraListener
+      // Virtual functions from ISnapdragonCameraListener
       // Only the onVideoFrame function is implemented. Logs odometry data and
       // saves the raw image to disk.
       virtual void onError() override;

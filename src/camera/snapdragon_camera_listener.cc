@@ -3,25 +3,25 @@
 #include <cstdlib>
 #include <iostream>
 
-#include "camera_listener.h"
+#include "snapdragon_camera_listener.h"
 
 namespace snap_cam {
-  void CameraListener::onError() {
+  void SnapdragonCameraListener::onError() {
     // No implementation
     return;
   }
 
-  void CameraListener::onControl(const camera::ControlEvent& control) {
+  void SnapdragonCameraListener::onControl(const camera::ControlEvent& control) {
     // No implementation
     return;
   }
 
-  void CameraListener::onPreviewFrame(camera::ICameraFrame* frame) {
+  void SnapdragonCameraListener::onPreviewFrame(camera::ICameraFrame* frame) {
     // No implementation
     return;
   }
 
-  void CameraListener::onVideoFrame(camera::ICameraFrame* frame) {
+  void SnapdragonCameraListener::onVideoFrame(camera::ICameraFrame* frame) {
     if(false == this->occupied_) {
       this->occupied_ = true;
     } else {
@@ -39,19 +39,19 @@ namespace snap_cam {
     this->occupied_ = false;
   }
 
-  void CameraListener::onPictureFrame(camera::ICameraFrame* frame) {
+  void SnapdragonCameraListener::onPictureFrame(camera::ICameraFrame* frame) {
     // No implementation
     return;
   }
 
-  void CameraListener::onMetadataFrame(camera::ICameraFrame* frame) {
+  void SnapdragonCameraListener::onMetadataFrame(camera::ICameraFrame* frame) {
     // No implementation
     return;
   }
 
-  void CameraListener::Options::Check() {
+  void SnapdragonCameraListener::Options::Check() {
     if(nullptr == this->image_saver) {
-      std::cerr << "CameraListener::Options::Check() -- Must specify an ImageSaver." << std::endl;
+      std::cerr << "SnapdragonCameraListener::Options::Check() -- Must specify an ImageSaver." << std::endl;
       std::exit(EXIT_FAILURE);
     }
   }
