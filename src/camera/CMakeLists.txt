@@ -13,6 +13,7 @@ set(SOURCE_FILES
   image_saver.cc
   metadata_logger.cc
   snapdragon_camera.cc
+  moving_average.cc
 )
 
 add_library(${TARGET} STATIC ${SOURCE_FILES})
