@@ -2,6 +2,7 @@
 
 #include <cstdlib>
 #include <unistd.h>
+#include <csignal>
 
 #include "boost/program_options.hpp" 
 #include "odometry_subscriber_node.h"
@@ -12,7 +13,21 @@
 
 using namespace snap_cam;
 
+namespace { 
+  // Signal variable and handler
+  volatile std::sig_atomic_t kill_program;
+  void SigIntHandler(int sig) {
+    kill_program = 1;
+  }
+}
+
 int main(int argc, char** argv) {
+  // Configure sigint handler
+  std::signal(SIGINT, SigIntHandler);
+
+  // Start ROS
+  ros::init(argc, argv, "SnapdragonCamera", ros::init_options::NoSigintHandler | ros::init_options::AnonymousName);
+
   // Variables to be parsed
   std::string odom_topic;
 
