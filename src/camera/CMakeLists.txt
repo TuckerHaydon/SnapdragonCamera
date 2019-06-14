@@ -1,6 +1,32 @@
+set(TARGET lib_camera)
 
 find_library(CAMERA_LIBS NAMES camera PATHS /usr/lib)
 
 if (NOT CAMERA_LIBS)
-    message(WARNING "Could not find camera libraries, not building targets that depend on it")
+  message(FATAL_ERROR "Could not find camera libraries! Are you sure they are
+  installed? Stopping CMake.")
 endif()
+
+set(SOURCE_FILES
+  camera_listener.cc
+)
+
+add_library(${TARGET} STATIC ${SOURCE_FILES})
+
+target_include_directories(${TARGET} PUBLIC
+  ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
+target_link_libraries(${TARGET} PUBLIC 
+  ${CAMERA_LIBS}
+)
+
+set_target_properties(${TARGET} PROPERTIES
+  CXX_STANDARD 11
+  CXX_STANDARD_REQUIRED YES
+  CXX_EXTENSIONS NO
+)
+
+target_compile_options(${TARGET} PRIVATE 
+  -Wfatal-errors
+)

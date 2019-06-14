@@ -6,7 +6,7 @@ namespace snap_cam {
   OdometrySubscriberNode::OdometrySubscriberNode(
       const std::string& topic, 
       std::shared_ptr<OdometryBufferSentry> odometry_buffer_sentry) {
-    this->node_handle_ = ros::NodeHandle("/");
+    this->node_handle_ = ros::NodeHandle("~");
     this->odometry_buffer_sentry_ = odometry_buffer_sentry;
     this->subscriber_ = node_handle_.subscribe(
         topic, 

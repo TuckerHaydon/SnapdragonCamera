@@ -5,7 +5,7 @@ include_directories( ${Boost_INCLUDE_DIR} )
 add_executable(capture_raw capture_raw.cc)
 target_link_libraries(capture_raw
   lib_ros
-  # lib_camera
+  lib_camera
   ${Boost_LIBRARIES}
 )
 
