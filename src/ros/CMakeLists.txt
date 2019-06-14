@@ -6,8 +6,6 @@ find_package(catkin REQUIRED COMPONENTS
   nav_msgs
 )
 
-find_package(Eigen3 3.3 REQUIRED NO_MODULE)
-
 set(SOURCE_FILES
   odometry_subscriber_node.cc
   odometry_buffer_sentry.cc
@@ -21,7 +19,6 @@ target_include_directories(${TARGET} PUBLIC
 )
 
 target_link_libraries(${TARGET} PUBLIC 
-  Eigen3::Eigen
   ${catkin_LIBRARIES}
 )
 

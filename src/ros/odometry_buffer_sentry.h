@@ -1,5 +1,7 @@
 // Author: Tucker Haydon
 
+#pragma once
+
 #include <mutex>
 #include "odometry_buffer.h"
 

@@ -2,7 +2,12 @@
 
 #pragma once
 
+#include <string>
+
 namespace snap_cam {
+  // The FrameOutputManager maintains state variables related to image capture.
+  // Provides access to the file path and file name of the next frame. Manages
+  // creation and maintenance of the directories where images will be saved.
   class FrameOutputManager {
     public:
       struct Options {
@@ -23,8 +28,16 @@ namespace snap_cam {
       FrameOutputManager(const Options& options)
         : options_{options} { this->options_.Check(); }
 
+      // Return the file name of the current image
       std::string FrameFileName() const;
+
+      // Return the file path of the current image
       std::string FrameFilePath() const;
+
+      // Return the absolute path to the output directory
+      std::string OutputDirectoryPath() const;
+
+      // Increment to the next image
       void Increment();
 
     private:

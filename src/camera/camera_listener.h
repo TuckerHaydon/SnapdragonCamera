@@ -9,13 +9,15 @@
 #include "image_saver.h"
 
 namespace snap_cam {
+  // Implementation of a camera::ICameraListener interface. Upon receipt of a
+  // frame, the CameraListener logs the most recent odometry data and saves the
+  // raw image to disk.
   class CameraListener : public camera::ICameraListener {
     public:
       // Options to configure this class
       struct Options {
         // Required. Pointer to object that will save an image.
         std::shared_ptr<ImageSaver> image_saver = nullptr;
-
         // Required. Point to object that manages the frame names and file
         // paths
         std::shared_ptr<FrameOutputManager> frame_output_manager = nullptr;
@@ -29,7 +31,8 @@ namespace snap_cam {
         : options_(options) { this->options_.Check(); }
 
       // Virtual functions from ICameraListener
-      // Only the onVideoFrame function is implemented
+      // Only the onVideoFrame function is implemented. Logs odometry data and
+      // saves the raw image to disk.
       virtual void onError() override;
       virtual void onControl(const camera::ControlEvent& control) override;
       virtual void onPreviewFrame(camera::ICameraFrame* frame) override;

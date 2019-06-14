@@ -17,27 +17,28 @@ namespace snap_cam {
 
   void OdometrySubscriberNode::SubscriberCallback(const nav_msgs::Odometry& msg) {
     OdometryBuffer buffer;
-    buffer.position = Eigen::Vector3d(
-        msg.pose.pose.position.x,
-        msg.pose.pose.position.y,
-        msg.pose.pose.position.z
-        );
-    buffer.velocity = Eigen::Vector3d(
-        msg.twist.twist.linear.x,
-        msg.twist.twist.linear.y,
-        msg.twist.twist.linear.z
-        );
-    buffer.orientation = Eigen::Quaterniond(
-        msg.pose.pose.orientation.w,
-        msg.pose.pose.orientation.x,
-        msg.pose.pose.orientation.y,
-        msg.pose.pose.orientation.z
-        );
-    buffer.angular_rate = Eigen::Vector3d(
-        msg.twist.twist.angular.x,
-        msg.twist.twist.angular.y,
-        msg.twist.twist.angular.z
-        );
+
+    buffer.position.x = msg.pose.pose.position.x;
+    buffer.position.y = msg.pose.pose.position.y;
+    buffer.position.z = msg.pose.pose.position.z;
+
+    buffer.velocity.x = msg.twist.twist.linear.x;
+    buffer.velocity.y = msg.twist.twist.linear.y;
+    buffer.velocity.z = msg.twist.twist.linear.z;
+
+    buffer.orientation.w = msg.pose.pose.orientation.w;
+    buffer.orientation.x = msg.pose.pose.orientation.x;
+    buffer.orientation.y = msg.pose.pose.orientation.y;
+    buffer.orientation.z = msg.pose.pose.orientation.z;
+
+    buffer.angular_rate.x =  msg.twist.twist.angular.x;
+    buffer.angular_rate.y =  msg.twist.twist.angular.y;
+    buffer.angular_rate.z =  msg.twist.twist.angular.z;
+
+    for(size_t idx = 0; idx < 36; ++idx) {
+      buffer.pose_covariance[idx] = msg.pose.covariance[idx];
+    }
+    
     this->odometry_buffer_sentry_->Write(buffer);
   }
 }

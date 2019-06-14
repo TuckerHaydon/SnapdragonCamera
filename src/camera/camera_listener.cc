@@ -31,7 +31,7 @@ namespace snap_cam {
     const std::string frame_file_name = this->options_.frame_output_manager->FrameFileName();
     const std::string frame_file_path = this->options_.frame_output_manager->FrameFilePath();
 
-    this->options_.metadata_logger->LogMetadata(frame_file_name);
+    // this->options_.metadata_logger->LogMetadata(frame_file_name);
     this->options_.image_saver->SaveImage(frame, frame_file_path);
 
     this->options_.frame_output_manager->Increment();

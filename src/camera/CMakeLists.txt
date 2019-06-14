@@ -9,6 +9,9 @@ endif()
 
 set(SOURCE_FILES
   camera_listener.cc
+  frame_output_manager.cc
+  image_saver.cc
+  metadata_logger.cc
 )
 
 add_library(${TARGET} STATIC ${SOURCE_FILES})
@@ -18,6 +21,7 @@ target_include_directories(${TARGET} PUBLIC
 )
 
 target_link_libraries(${TARGET} PUBLIC 
+  lib_ros
   ${CAMERA_LIBS}
 )
 

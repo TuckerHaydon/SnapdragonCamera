@@ -3,8 +3,10 @@
 #pragma once
 
 #include <camera.h>
+#include <string>
 
 namespace snap_cam {
+  // Class in charge of saving images to disk
   class ImageSaver {
     public:
       struct Options {
@@ -18,5 +20,6 @@ namespace snap_cam {
       void SaveImage(camera::ICameraFrame* frame, const std::string& frame_file_path) const;
 
     private:
+      Options options_;
   };
 }
