@@ -6,6 +6,7 @@
 
 #include "frame_output_manager.h"
 #include "image_saver.h"
+#include "metadata_logger.h"
 
 namespace snap_cam {
   // Implementation of a camera::ISnapdragonCameraListener interface. Upon receipt of a
@@ -20,6 +21,8 @@ namespace snap_cam {
         // Required. Point to object that manages the frame names and file
         // paths
         std::shared_ptr<FrameOutputManager> frame_output_manager = nullptr;
+        // Required. Metadata logging object
+        std::shared_ptr<MetadataLogger> metadata_logger = nullptr;
 
         Options() {}
         void Check();

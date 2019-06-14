@@ -90,6 +90,7 @@ Usage)V0G0N");
   SnapdragonCameraListener::Options camera_listener_options;
   camera_listener_options.frame_output_manager = frame_output_manager;
   camera_listener_options.image_saver = image_saver;
+  camera_listener_options.metadata_logger = metadata_logger;
   auto camera_listener = std::make_shared<SnapdragonCameraListener>(camera_listener_options);
 
   SnapdragonCamera::Options camera_options;
