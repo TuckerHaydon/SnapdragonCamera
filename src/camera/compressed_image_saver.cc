@@ -3,6 +3,9 @@
 #include <fstream>
 #include <iostream>
 #include <opencv2/opencv.hpp>
+#include <grp.h>
+#include <pwd.h>
+#include <unistd.h>
 
 #include "compressed_image_saver.h"
 
@@ -24,6 +27,22 @@ namespace snapdragon_camera {
     const std::vector<int> imwrite_params = {CV_IMWRITE_JPEG_QUALITY, this->options_.jpeg_compression_quality};
     cv::imwrite(frame_file_path, rgb_frame, imwrite_params);
     rgb_frame.release();
+
+    // Set the user/group of the image to linaro:linaro
+    {
+      const char* linaro = "linaro";
+
+      const struct group* linaro_gr = getgrnam(linaro);
+      const gid_t linaro_gid = linaro_gr->gr_gid;
+
+      const struct passwd* linaro_passwd = getpwnam(linaro);
+      const uid_t linaro_uid = linaro_passwd->pw_uid;
+
+      if(0 != chown(frame_file_path.c_str(), linaro_uid, linaro_gid)) {
+        std::cerr << "CompressedImageSaver::SaveImage() -- Could not change user/group of frame." << std::endl;
+        std::exit(EXIT_FAILURE);
+      }
+    }
   }
 
   void CompressedImageSaver::Options::Check() {

@@ -7,6 +7,9 @@
 #include <ios>
 #include <sys/stat.h>
 #include <iomanip>
+#include <grp.h>
+#include <pwd.h>
+#include <unistd.h>
 
 namespace snapdragon_camera {
 
@@ -48,6 +51,22 @@ namespace snapdragon_camera {
     // Create log file
     const std::string log_file_path = this->options_.log_file_directory + this->options_.log_file_name;
     this->log_file_ = std::make_shared<std::ofstream>(log_file_path, std::ios_base::trunc);
+
+    // Set the user/group of the log file to linaro:linaro
+    {
+      const char* linaro = "linaro";
+
+      const struct group* linaro_gr = getgrnam(linaro);
+      const gid_t linaro_gid = linaro_gr->gr_gid;
+
+      const struct passwd* linaro_passwd = getpwnam(linaro);
+      const uid_t linaro_uid = linaro_passwd->pw_uid;
+
+      if(0 != chown(log_file_path.c_str(), linaro_uid, linaro_gid)) {
+        std::cerr << "MetadataLogger::MetadataLogger() -- Could not change user/group of log file." << std::endl;
+        std::exit(EXIT_FAILURE);
+      }
+    }
 
     // Set the floating point precision
     *(this->log_file_) << std::setprecision(10);

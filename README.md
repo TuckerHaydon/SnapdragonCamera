@@ -34,4 +34,18 @@ camera.
 cd SnapdragonCamera/build
 sudo ./src/exe/capture --odom_topic /phoenix/ENU/local_odom
 ```
+## Helper Scripts
+Helper scripts are available in the [scripts](scripts/) folder. Use these
+scripts to crop and convert the raw images to jpeg on the snapdragon flight.
+Examine their usage with the 'help' command. May require installation of avconc
+and imagemagick.
+
+```bash
+./nv12-to-jpg-linaro.bash --help
+Examine their usage with the 'help' command.
+```bash
+./nv12-to-jpg-linaro.bash --help
+./remove-green-bar-linaro.bash --help
+```
+
 

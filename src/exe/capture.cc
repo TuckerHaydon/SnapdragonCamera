@@ -34,6 +34,8 @@ int main(int argc, char** argv) {
   // Variables to be parsed
   std::string odom_topic;
   bool compress_images;
+  std::string root_dir;
+  std::string output_dir;
 
   // Parse command line options with boost
   try { 
@@ -47,8 +49,10 @@ Notes: Must run this program as root. Can only access the cameras as root.
 Usage)V0G0N"); 
     desc.add_options() 
       ("help,h", "Print help messages") 
-      ("odom_topic", po::value<std::string>(&odom_topic)->required(), "Full path to ROS topic providing odometry data")
-      ("compress_images", po::value<bool>(&compress_images)->default_value(false), "Compress images into jpeg format. Else save raw.")
+      ("odom_topic", po::value<std::string>(&odom_topic)->required(), "Full path to ROS topic providing odometry data.")
+      ("compress_images", po::value<bool>(&compress_images)->default_value(false), "Compress images into jpeg format, else save raw.")
+      ("root_dir", po::value<std::string>(&root_dir)->default_value("/mnt/storage/images/"), "Directory in which image directory will be placed.")
+      ("output_dir", po::value<std::string>(&output_dir)->default_value(""), "Directory relative to root_dir in which images will be placed. Will be created if it does not exist.")
       ; 
 
     po::variables_map vm;
@@ -66,7 +70,7 @@ Usage)V0G0N");
       return EXIT_FAILURE;
   }
   catch(...) {
-      std::cerr << "Unknown error -- capture_raw::main()" << std::endl;
+      std::cerr << "Unknown error -- capture::main()" << std::endl;
       return EXIT_FAILURE;
   }
 
@@ -76,6 +80,7 @@ Usage)V0G0N");
     std::exit(EXIT_FAILURE);
   }
 
+  // Odometry buffer sentry enabling thread-safe read/write access
   auto odometry_buffer_sentry = std::make_shared<OdometryBufferSentry>();
   OdometrySubscriberNode odometry_subscriber_node(
       odom_topic,
@@ -108,6 +113,8 @@ Usage)V0G0N");
     image_saver = std::make_shared<RawImageSaver>(image_saver_options);
   }
 
+  frame_output_manager_options.root_dir = root_dir;
+  frame_output_manager_options.output_dir = output_dir;
   frame_output_manager = std::make_shared<FrameOutputManager>(frame_output_manager_options);
 
   metadata_logger_options.odometry_buffer_sentry = odometry_buffer_sentry;
