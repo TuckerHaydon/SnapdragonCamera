@@ -48,4 +48,11 @@ Examine their usage with the 'help' command.
 ./remove-green-bar-linaro.bash --help
 ```
 
-
+### Tips
+- Saving raw images requires less CPU usages, but greater IO usage. Choose the
+  strategy you want depending on your system needs.
+- Adjusting the jpeg compression parameter adjusts affects both the frame save
+  rate and the frame save size. Choose the compression ratio to fit your disk
+  and framerate needs.
+- If you are ssh'd into the snapdragon with X11 (ssh -Y linaro@), you can
+  quickly view jpg images with ```eog frame00001.jpg```.

@@ -80,5 +80,14 @@ namespace snapdragon_camera {
         << "]" << std::endl;
       std::exit(EXIT_FAILURE);
     }
+
+    // Check jpeg compression quality within correct range
+    if(0 > this->jpeg_compression_quality || 100 < this->jpeg_compression_quality) {
+      std::cerr 
+        << "CompressedImageSaver::Options::Check() -- jpeg compression quality must be in [0,100]. Currently: " 
+        << this->jpeg_compression_quality 
+        << std::endl;
+      std::exit(EXIT_FAILURE);
+    }
   }
 }

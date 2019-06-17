@@ -10,6 +10,9 @@
 #include <condition_variable>
 
 namespace snapdragon_camera {
+  // Class that encapsulates camera configuration and functions. Configure the
+  // camera with the Options structure and run the camera on its own thread
+  // using the Start()/Stop() functions. Uses RAII to prevent resource leaks.
   class SnapdragonCamera {
     public:
       enum CameraID { 
@@ -36,6 +39,8 @@ namespace snapdragon_camera {
 
       struct FocusModes {
         static std::string Fixed()               { return "fixed"; };
+
+        // Originally these were present, but no longer.
         // static std::string Auto()               { return "auto"; };
         // static std::string Infinity()           { return "infinity"; };
         // static std::string Macro()              { return "macro"; };

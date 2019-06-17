@@ -63,6 +63,7 @@ int main(int argc, char** argv) {
   std::string root_dir;
   std::string output_dir;
   std::string image_size;
+  int jpeg_compression_quality;
 
   // Parse command line options with boost
   try { 
@@ -79,6 +80,7 @@ Usage)V0G0N");
       ("odom_topic", po::value<std::string>(&odom_topic)->required(), "Full path to ROS topic providing odometry data.")
       ("image_size", po::value<std::string>(&image_size)->default_value("4k"), "Size of images to be saved [4k, 1080p, 720p, vga].")
       ("compress_images", po::value<bool>(&compress_images)->default_value(false), "Compress images into jpeg format, else save raw.")
+      ("jpeg_compression_quality", po::value<int>(&jpeg_compression_quality)->default_value(95), "Jpeg compression quality [0,100], 100 is best")
       ("root_dir", po::value<std::string>(&root_dir)->default_value("/mnt/storage/images/"), "Directory in which image directory will be placed.")
       ("output_dir", po::value<std::string>(&output_dir)->default_value(""), "Directory relative to root_dir in which images will be placed. Will be created if it does not exist.")
       ; 
@@ -136,6 +138,7 @@ Usage)V0G0N");
     CompressedImageSaver::Options image_saver_options;
     image_saver_options.frame_size.width = image_dimensions[0];
     image_saver_options.frame_size.height = image_dimensions[1];
+    image_saver_options.jpeg_compression_quality = jpeg_compression_quality;
     image_saver = std::make_shared<CompressedImageSaver>(image_saver_options);
   } else {
     frame_output_manager_options.extension = ".yuv";
