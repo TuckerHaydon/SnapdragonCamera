@@ -6,7 +6,9 @@ Images are not the sizes they claim to be. The following table shows describes
 the intended and true image sizes. Extra pixels manifest as green lines at the
 bottom of images.
 - 4k:     (3840, 2160) --> (3840, 2176)
-- 1080p:  () --> () 
+- 1080p:  (1920, 1080) --> (1920, 1088) 
+- 720p:   (1280, 720)  --> (1280, 736) 
+- VGA:    (640,  480)  --> (640, 480)
 
 ## Raw image data size
 - A 4k raw image is ~12 MB.

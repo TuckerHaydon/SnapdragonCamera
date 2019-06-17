@@ -46,9 +46,27 @@ namespace snapdragon_camera {
   }
 
   void CompressedImageSaver::Options::Check() {
+    // Check dimensions specified
     if(0 == this->frame_size.width || 0 == this->frame_size.height) {
       std::cerr << "CompressedImageSaver::Options::Check() -- ImageSize must be non-zero." << std::endl;
       std::exit(EXIT_FAILURE);
+    }
+
+    // Adjust dimensions. Certain image sizes have extra lines of pixels. See
+    // doc/notes.md for further details.
+    if(3840 == this->frame_size.width && 2160 == this->frame_size.height) {
+      this->frame_size.width = 3840;
+      this->frame_size.height = 2176;
+    }
+
+    if(1920 == this->frame_size.width && 1080 == this->frame_size.height) {
+      this->frame_size.width = 1920;
+      this->frame_size.height = 1088;
+    }
+
+    if(1280 == this->frame_size.width && 720 == this->frame_size.height) {
+      this->frame_size.width = 1280;
+      this->frame_size.height = 736;
     }
   }
 }

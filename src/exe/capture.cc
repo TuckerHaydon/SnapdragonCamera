@@ -22,6 +22,32 @@ namespace {
   void SigIntHandler(int sig) {
     kill_program = 1;
   }
+
+  // Helper function. Interprets a string as an camera::ImageSize. Returns
+  // false if invalid.
+  void ImageSizeStringToCameraImageSize(const std::string& image_size_string, camera::ImageSize* image_size) {
+    if("4k" == image_size_string) {
+      *image_size = SnapdragonCamera::ImageSizes::FourK();
+    } else if("1080p" == image_size_string) {
+      *image_size = SnapdragonCamera::ImageSizes::FHD();
+    } else if("720p" == image_size_string) {
+      *image_size = SnapdragonCamera::ImageSizes::HD();
+    } else if("vga" == image_size_string) {
+      *image_size = SnapdragonCamera::ImageSizes::VGA();
+    } else {
+      std::cerr << "capture -- ImageSizeStringToCameraImageSize -- Invalid image size string: " << image_size_string << std::endl;
+      exit(EXIT_FAILURE);
+    }
+  }
+
+  // Helper function. Interprets a string as an image [width, height]. Returns
+  // false if invalid.
+  void ImageSizeStringToWidthHeight(const std::string& image_size_string, size_t image_size[2]) {
+    camera::ImageSize camera_image_size;
+    ImageSizeStringToCameraImageSize(image_size_string, &camera_image_size);
+    image_size[0] = camera_image_size.width;
+    image_size[1] = camera_image_size.height;
+  }
 }
 
 int main(int argc, char** argv) {
@@ -36,6 +62,7 @@ int main(int argc, char** argv) {
   bool compress_images;
   std::string root_dir;
   std::string output_dir;
+  std::string image_size;
 
   // Parse command line options with boost
   try { 
@@ -50,6 +77,7 @@ Usage)V0G0N");
     desc.add_options() 
       ("help,h", "Print help messages") 
       ("odom_topic", po::value<std::string>(&odom_topic)->required(), "Full path to ROS topic providing odometry data.")
+      ("image_size", po::value<std::string>(&image_size)->default_value("4k"), "Size of images to be saved [4k, 1080p, 720p, vga].")
       ("compress_images", po::value<bool>(&compress_images)->default_value(false), "Compress images into jpeg format, else save raw.")
       ("root_dir", po::value<std::string>(&root_dir)->default_value("/mnt/storage/images/"), "Directory in which image directory will be placed.")
       ("output_dir", po::value<std::string>(&output_dir)->default_value(""), "Directory relative to root_dir in which images will be placed. Will be created if it does not exist.")
@@ -102,9 +130,12 @@ Usage)V0G0N");
   if(true == compress_images) {
     frame_output_manager_options.extension = ".jpg";
 
+    size_t image_dimensions[2];
+    ImageSizeStringToWidthHeight(image_size, image_dimensions);
+
     CompressedImageSaver::Options image_saver_options;
-    image_saver_options.frame_size.width = 3840;
-    image_saver_options.frame_size.height = 2176;
+    image_saver_options.frame_size.width = image_dimensions[0];
+    image_saver_options.frame_size.height = image_dimensions[1];
     image_saver = std::make_shared<CompressedImageSaver>(image_saver_options);
   } else {
     frame_output_manager_options.extension = ".yuv";
@@ -126,8 +157,12 @@ Usage)V0G0N");
   camera_listener_options.metadata_logger = metadata_logger;
   camera_listener = std::make_shared<SnapdragonCameraListener>(camera_listener_options);
 
+  camera::ImageSize camera_image_size;
+  ImageSizeStringToCameraImageSize(image_size, &camera_image_size);
+
   camera_options.camera_listener = camera_listener;
   camera_options.camera_id = SnapdragonCamera::CameraID::FORWARD;
+  camera_options.image_size = camera_image_size;
   camera = std::make_shared<SnapdragonCamera>(camera_options);
 
   // Start the camera

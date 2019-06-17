@@ -18,14 +18,10 @@ namespace snapdragon_camera {
       };
 
       struct ImageSizes {
-        static camera::ImageSize FourK()        { return camera::ImageSize(4096, 2160); };
-        static camera::ImageSize UHD()          { return camera::ImageSize(3840, 2160); };
+        static camera::ImageSize FourK()        { return camera::ImageSize(3840, 2160); };
         static camera::ImageSize FHD()          { return camera::ImageSize(1920, 1080); };
         static camera::ImageSize HD()           { return camera::ImageSize(1280, 720); }; 
         static camera::ImageSize VGA()          { return camera::ImageSize(640, 480); };
-        static camera::ImageSize StereoVGA()    { return camera::ImageSize(1280, 480); };
-        static camera::ImageSize QVGA()         { return camera::ImageSize(320, 240); };
-        static camera::ImageSize StereoQVGA()   { return camera::ImageSize(640, 240); };
       };
 
       struct PreviewFPSRanges {
@@ -83,8 +79,8 @@ namespace snapdragon_camera {
         std::shared_ptr<camera::ICameraListener> camera_listener = nullptr;
         // Which camera to use. Defaults to the front camera.
         CameraID camera_id = CameraID::FORWARD;
-        // Preview/Video/Picture size. Defaults to UHD.
-        camera::ImageSize image_size = ImageSizes::UHD();
+        // Preview/Video/Picture size. Defaults to FourK.
+        camera::ImageSize image_size = ImageSizes::FourK();
         // Focus mode. Unless you know what you're doing, default to auto.
         std::string focus_mode = FocusModes::Fixed();
         // White balance. Unless you know what you're doing, default to auto.
