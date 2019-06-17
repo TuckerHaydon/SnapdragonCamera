@@ -8,7 +8,7 @@
 #include "image_saver.h"
 #include "metadata_logger.h"
 
-namespace snap_cam {
+namespace snapdragon_camera {
   // Implementation of a camera::ISnapdragonCameraListener interface. Upon receipt of a
   // frame, the SnapdragonCameraListener logs the most recent odometry data and saves the
   // raw image to disk.

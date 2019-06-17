@@ -2,7 +2,7 @@
 
 #include "odometry_buffer_sentry.h"
 
-namespace snap_cam {
+namespace snapdragon_camera {
 
   void OdometryBufferSentry::Read(OdometryBuffer& buffer) const {
     std::lock_guard<std::mutex>(this->mtx_);

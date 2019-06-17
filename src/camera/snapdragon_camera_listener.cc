@@ -9,7 +9,7 @@
 #include "moving_average.h"
 #include "snapdragon_camera_listener.h"
 
-namespace snap_cam {
+namespace snapdragon_camera {
   void SnapdragonCameraListener::onError() {
     // No implementation
     return;

@@ -4,7 +4,7 @@
 
 #include <string>
 
-namespace snap_cam {
+namespace snapdragon_camera {
   // The FrameOutputManager maintains state variables related to image capture.
   // Provides access to the file path and file name of the next frame. Manages
   // creation and maintenance of the directories where images will be saved.

@@ -4,7 +4,7 @@
 
 #include "moving_average.h"
 
-namespace snap_cam {
+namespace snapdragon_camera {
   MovingAverage::MovingAverage(const Options& options)
     : options_(options) {
       this->buffer_ = new double[this->options_.buffer_size];

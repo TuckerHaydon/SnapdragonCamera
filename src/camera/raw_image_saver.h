@@ -7,7 +7,7 @@
 
 #include "image_saver.h"
 
-namespace snap_cam {
+namespace snapdragon_camera {
   // Class in charge of saving raw images to disk
   class RawImageSaver : public ImageSaver {
     public:

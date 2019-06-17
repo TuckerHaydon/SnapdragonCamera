@@ -2,7 +2,7 @@
 
 #pragma once
 
-namespace snap_cam {
+namespace snapdragon_camera {
   class MovingAverage {
     public:
       struct Options {

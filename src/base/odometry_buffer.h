@@ -4,7 +4,7 @@
 
 #include <vector>
 
-namespace snap_cam {
+namespace snapdragon_camera {
   // POD struct containing odometry data
   struct OdometryBuffer {
     struct Vector3D {

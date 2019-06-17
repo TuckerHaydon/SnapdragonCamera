@@ -2,7 +2,7 @@
 
 #include "odometry_subscriber_node.h"
 
-namespace snap_cam {
+namespace snapdragon_camera {
   OdometrySubscriberNode::OdometrySubscriberNode(
       const std::string& topic, 
       std::shared_ptr<OdometryBufferSentry> odometry_buffer_sentry) {

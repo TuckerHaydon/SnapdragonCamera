@@ -6,7 +6,7 @@
 
 #include "compressed_image_saver.h"
 
-namespace snap_cam {
+namespace snapdragon_camera {
   void CompressedImageSaver::SaveImage(camera::ICameraFrame* frame, const std::string& frame_file_path) const {
 
     // Convert image from NV12 to rgb

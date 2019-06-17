@@ -5,7 +5,7 @@
 
 #include "snapdragon_camera.h"
 
-namespace snap_cam {
+namespace snapdragon_camera {
   SnapdragonCamera::SnapdragonCamera(const Options& options)
     : options_(options) {
     this->options_.Check();

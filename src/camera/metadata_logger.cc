@@ -8,7 +8,7 @@
 #include <sys/stat.h>
 #include <iomanip>
 
-namespace snap_cam {
+namespace snapdragon_camera {
 
   void MetadataLogger::Options::Check() {
     // Check odometry_buffer_sentry not null

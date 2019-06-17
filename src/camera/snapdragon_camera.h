@@ -9,7 +9,7 @@
 #include <mutex>
 #include <condition_variable>
 
-namespace snap_cam {
+namespace snapdragon_camera {
   class SnapdragonCamera {
     public:
       enum CameraID { 

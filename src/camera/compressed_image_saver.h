@@ -7,7 +7,7 @@
 
 #include "image_saver.h"
 
-namespace snap_cam {
+namespace snapdragon_camera {
   // Class in charge of compressing and saving images to disk
   class CompressedImageSaver : public ImageSaver {
     public:

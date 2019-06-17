@@ -8,7 +8,7 @@
 
 #include "odometry_buffer_sentry.h"
 
-namespace snap_cam {
+namespace snapdragon_camera {
   class MetadataLogger {
     public:
       struct Options {

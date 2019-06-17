@@ -14,7 +14,7 @@
 #include "metadata_logger.h"
 #include "snapdragon_camera.h"
 
-using namespace snap_cam;
+using namespace snapdragon_camera;
 
 namespace { 
   // Signal variable and handler

@@ -7,7 +7,7 @@
 #include "nav_msgs/Odometry.h"
 #include "odometry_buffer_sentry.h"
 
-namespace snap_cam {
+namespace snapdragon_camera {
   // Class encapsulating a single ROS odometry subscriber. The subscriber
   // converts the ROS message data into an internal data structure protected by
   // a sentry object for safe asynchronous access.

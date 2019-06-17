@@ -5,7 +5,7 @@
 #include <camera.h>
 #include <string>
 
-namespace snap_cam {
+namespace snapdragon_camera {
   // Interface for saving images
   class ImageSaver {
     public:

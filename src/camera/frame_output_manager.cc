@@ -6,7 +6,7 @@
 #include <iostream>
 #include "frame_output_manager.h"
 
-namespace snap_cam {
+namespace snapdragon_camera {
 
   std::string FrameOutputManager::FrameFilePath() const {
     const std::string file_path = 

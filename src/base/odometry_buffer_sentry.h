@@ -5,7 +5,7 @@
 #include <mutex>
 #include "odometry_buffer.h"
 
-namespace snap_cam {
+namespace snapdragon_camera {
   // Sentry object protecting an OdometryBuffer, enabling safe asynchronous
   // read/write access.
   class OdometryBufferSentry {
