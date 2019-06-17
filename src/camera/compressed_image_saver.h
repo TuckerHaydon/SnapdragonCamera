@@ -17,8 +17,12 @@ namespace snapdragon_camera {
           size_t height = 0;
         };
 
-        // Size of the compressed image in pixels
+        // Reported size of the compressed image in pixels. Set this.
         FrameSize frame_size;
+      
+        // Actual size of frame based on experiments. Set automatically. No not
+        // set this.
+        FrameSize true_frame_size;
 
         // Quality of jpeg compression [0,100], best=100
         int jpeg_compression_quality = 95;
