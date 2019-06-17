@@ -42,7 +42,10 @@ namespace snap_cam {
 
     // Configure parameters
     camera::CameraParams camera_parameters;
-    camera_parameters.init(this->camera_device_);
+    if(0 != camera_parameters.init(this->camera_device_)) {
+      std::cerr << "SnapdragonCamera::Start() -- Failed to initialize camera parameters." << std::endl; 
+      std::exit(EXIT_FAILURE);
+    }
 
     camera_parameters.setPreviewSize(this->options_.image_size);
     camera_parameters.setVideoSize(this->options_.image_size);
@@ -66,7 +69,10 @@ namespace snap_cam {
     // camera_parameters.setHorizontalMirror(bool);
 
     // Commit the parameters to the camera device
-    camera_parameters.commit();
+    if(0 != camera_parameters.commit() ) {
+      std::cerr << "SnapdragonCamera::Start() -- Failed to commit camera parameters." << std::endl;
+      std::exit(EXIT_FAILURE);
+    }
     this->camera_device_->setParameters(camera_parameters);
 
     // Start the camera

@@ -9,7 +9,8 @@
 #include "odometry_subscriber_node.h"
 #include "snapdragon_camera_listener.h"
 #include "frame_output_manager.h"
-#include "image_saver.h"
+#include "raw_image_saver.h"
+#include "compressed_image_saver.h"
 #include "metadata_logger.h"
 #include "snapdragon_camera.h"
 
@@ -32,6 +33,7 @@ int main(int argc, char** argv) {
 
   // Variables to be parsed
   std::string odom_topic;
+  bool compress_images;
 
   // Parse command line options with boost
   try { 
@@ -46,6 +48,7 @@ Usage)V0G0N");
     desc.add_options() 
       ("help,h", "Print help messages") 
       ("odom_topic", po::value<std::string>(&odom_topic)->required(), "Full path to ROS topic providing odometry data")
+      ("compress_images", po::value<bool>(&compress_images)->default_value(true), "Compress images into jpeg format. Else save raw.")
       ; 
 
     po::variables_map vm;
@@ -78,25 +81,47 @@ Usage)V0G0N");
       odom_topic,
       odometry_buffer_sentry);
 
-  auto frame_output_manager = std::make_shared<FrameOutputManager>(FrameOutputManager::Options());
+  // Declare components of camera pipeline
+  std::shared_ptr<FrameOutputManager> frame_output_manager;
+  std::shared_ptr<MetadataLogger> metadata_logger;
+  std::shared_ptr<ImageSaver> image_saver;
+  std::shared_ptr<SnapdragonCameraListener> camera_listener;
+  std::shared_ptr<SnapdragonCamera> camera;
 
+  FrameOutputManager::Options frame_output_manager_options;
   MetadataLogger::Options metadata_logger_options;
+  SnapdragonCameraListener::Options camera_listener_options;
+  SnapdragonCamera::Options camera_options;
+
+  // Configure
+  if(true == compress_images) {
+    frame_output_manager_options.extension = ".jpg";
+
+    CompressedImageSaver::Options image_saver_options;
+    image_saver_options.frame_size.width = 3840;
+    image_saver_options.frame_size.height = 2176;
+    image_saver = std::make_shared<CompressedImageSaver>(image_saver_options);
+  } else {
+    frame_output_manager_options.extension = ".yuv";
+
+    RawImageSaver::Options image_saver_options;
+    image_saver = std::make_shared<RawImageSaver>(image_saver_options);
+  }
+
+  frame_output_manager = std::make_shared<FrameOutputManager>(frame_output_manager_options);
+
   metadata_logger_options.odometry_buffer_sentry = odometry_buffer_sentry;
   metadata_logger_options.log_file_directory = frame_output_manager->OutputDirectoryPath();
-  auto metadata_logger = std::make_shared<MetadataLogger>(metadata_logger_options);
+  metadata_logger = std::make_shared<MetadataLogger>(metadata_logger_options);
 
-  auto image_saver = std::make_shared<ImageSaver>(ImageSaver::Options());
-
-  SnapdragonCameraListener::Options camera_listener_options;
   camera_listener_options.frame_output_manager = frame_output_manager;
   camera_listener_options.image_saver = image_saver;
   camera_listener_options.metadata_logger = metadata_logger;
-  auto camera_listener = std::make_shared<SnapdragonCameraListener>(camera_listener_options);
+  camera_listener = std::make_shared<SnapdragonCameraListener>(camera_listener_options);
 
-  SnapdragonCamera::Options camera_options;
   camera_options.camera_listener = camera_listener;
   camera_options.camera_id = SnapdragonCamera::CameraID::FORWARD;
-  auto camera = std::make_shared<SnapdragonCamera>(camera_options);
+  camera = std::make_shared<SnapdragonCamera>(camera_options);
 
   // Start the camera
   std::thread camera_thread([&](){ camera->Start(); });

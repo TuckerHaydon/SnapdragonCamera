@@ -6,20 +6,9 @@
 #include <string>
 
 namespace snap_cam {
-  // Class in charge of saving images to disk
+  // Interface for saving images
   class ImageSaver {
     public:
-      struct Options {
-        Options() {}
-        void Check();
-      };
-
-      ImageSaver(const Options& options)
-        : options_{options} { this->options_.Check(); }
-
-      void SaveImage(camera::ICameraFrame* frame, const std::string& frame_file_path) const;
-
-    private:
-      Options options_;
+      virtual void SaveImage(camera::ICameraFrame* frame, const std::string& frame_file_path) const = 0;
   };
 }

@@ -1,28 +1,17 @@
-set(TARGET lib_ros)
-
-find_package(catkin REQUIRED COMPONENTS
-  roscpp
-  message_generation
-  nav_msgs
-)
+set(TARGET lib_base)
 
 set(SOURCE_FILES
-  odometry_subscriber_node.cc
+  odometry_buffer_sentry.cc
+  moving_average.cc
 )
 
 add_library(${TARGET} STATIC ${SOURCE_FILES})
 
 target_include_directories(${TARGET} PUBLIC
   ${CMAKE_CURRENT_SOURCE_DIR}
-  ${catkin_INCLUDE_DIRS}
 )
 
-target_link_libraries(${TARGET} PUBLIC 
-  lib_base
-  ${catkin_LIBRARIES}
-)
-
-add_dependencies(${TARGET} nav_msgs_generate_messages_cpp)
+# target_link_libraries(${TARGET} PUBLIC )
 
 set_target_properties(${TARGET} PROPERTIES
   CXX_STANDARD 11

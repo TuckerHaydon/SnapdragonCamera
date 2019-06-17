@@ -7,13 +7,15 @@ if (NOT CAMERA_LIBS)
   installed? Stopping CMake.")
 endif()
 
+find_package( OpenCV REQUIRED )
+
 set(SOURCE_FILES
   snapdragon_camera_listener.cc
   frame_output_manager.cc
-  image_saver.cc
   metadata_logger.cc
   snapdragon_camera.cc
-  moving_average.cc
+  compressed_image_saver.cc
+  raw_image_saver.cc
 )
 
 add_library(${TARGET} STATIC ${SOURCE_FILES})
@@ -23,8 +25,10 @@ target_include_directories(${TARGET} PUBLIC
 )
 
 target_link_libraries(${TARGET} PUBLIC 
+  lib_base
   lib_ros
   ${CAMERA_LIBS}
+  ${OpenCV_LIBS}
 )
 
 set_target_properties(${TARGET} PROPERTIES
