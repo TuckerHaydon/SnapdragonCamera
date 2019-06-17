@@ -9,23 +9,21 @@
 namespace snap_cam {
   void CompressedImageSaver::SaveImage(camera::ICameraFrame* frame, const std::string& frame_file_path) const {
 
+    // Convert image from NV12 to rgb
     cv::Mat yuv_frame = cv::Mat(
         1.5 * this->options_.frame_size.height, 
         this->options_.frame_size.width, 
         CV_8UC1, 
         frame->data);
 
-    cv::Mat bgr_frame;
-    cv::cvtColor(yuv_frame, bgr_frame, CV_YUV420sp2BGR);
+    cv::Mat rgb_frame;
+    cv::cvtColor(yuv_frame, rgb_frame, CV_YUV420sp2RGB);
     yuv_frame.release();
 
-    const std::vector<int> imwrite_params = {CV_IMWRITE_JPEG_QUALITY, 100};
-    cv::imwrite(frame_file_path, bgr_frame, imwrite_params);
-    bgr_frame.release();
-
-    // std::fstream frame_file(frame_file_path, std::ios::out | std::ios::binary);
-    // frame_file.write((char*)frame->data, frame->size);
-    // frame_file.close();
+    // Compress image as jpeg and write to disk
+    const std::vector<int> imwrite_params = {CV_IMWRITE_JPEG_QUALITY, this->options_.jpeg_compression_quality};
+    cv::imwrite(frame_file_path, rgb_frame, imwrite_params);
+    rgb_frame.release();
   }
 
   void CompressedImageSaver::Options::Check() {

@@ -48,7 +48,7 @@ Usage)V0G0N");
     desc.add_options() 
       ("help,h", "Print help messages") 
       ("odom_topic", po::value<std::string>(&odom_topic)->required(), "Full path to ROS topic providing odometry data")
-      ("compress_images", po::value<bool>(&compress_images)->default_value(true), "Compress images into jpeg format. Else save raw.")
+      ("compress_images", po::value<bool>(&compress_images)->default_value(false), "Compress images into jpeg format. Else save raw.")
       ; 
 
     po::variables_map vm;

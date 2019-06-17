@@ -56,9 +56,7 @@ namespace snap_cam {
     camera_parameters.setSharpness(this->options_.sharpness);
     camera_parameters.setBrightness(this->options_.brightness);
     camera_parameters.setContrast(this->options_.contrast);
-    // camera_parameters.setPreviewFpsRange();
-    // camera_parameters.setVideoFPS();
-    camera_parameters.setPreviewFpsRange(camera_parameters.getSupportedPreviewFpsRanges()[3]);
+    camera_parameters.setPreviewFpsRange(this->options_.preview_fps);
     camera_parameters.setVideoFPS(camera_parameters.getSupportedVideoFps()[0]);
     camera_parameters.setPreviewFormat(this->options_.preview_format);
 

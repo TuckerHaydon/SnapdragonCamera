@@ -17,7 +17,11 @@ namespace snap_cam {
           size_t height = 0;
         };
 
+        // Size of the compressed image in pixels
         FrameSize frame_size;
+
+        // Quality of jpeg compression [0,100], best=100
+        int jpeg_compression_quality = 95;
 
         Options() {}
         void Check();
