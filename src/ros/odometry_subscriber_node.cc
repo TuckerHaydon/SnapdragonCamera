@@ -38,6 +38,9 @@ namespace snapdragon_camera {
     for(size_t idx = 0; idx < 36; ++idx) {
       buffer.pose_covariance[idx] = msg.pose.covariance[idx];
     }
+
+    buffer.time.sec = msg.header.stamp.sec;
+    buffer.time.nsec = msg.header.stamp.nsec;
     
     this->odometry_buffer_sentry_->Write(buffer);
   }

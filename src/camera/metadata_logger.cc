@@ -79,6 +79,7 @@ namespace snapdragon_camera {
     *(this->log_file_) << "#   File name" << std::endl;
     *(this->log_file_) << "#   Position (X Y Z)" << std::endl;
     *(this->log_file_) << "#   Orientation (W X Y Z) " << std::endl;
+    *(this->log_file_) << "#   Timing (ros_sec ros_nsec cam_time_stamp) " << std::endl;
     *(this->log_file_) << "#   PoseCovariance (36 elements, [position, orientation], row-major)" << std::endl;
   }
 
@@ -87,7 +88,7 @@ namespace snapdragon_camera {
     this->log_file_->close();
   }
 
-  void MetadataLogger::Log(const std::string& frame_file_name) const {
+  void MetadataLogger::Log(const std::string& frame_file_name, const uint64_t& time_stamp) const {
     // Retrieve most recent pose
     OdometryBuffer odometry_buffer;
     this->options_.odometry_buffer_sentry->Read(odometry_buffer);
@@ -101,7 +102,10 @@ namespace snapdragon_camera {
       << odometry_buffer.orientation.w << " "
       << odometry_buffer.orientation.x << " "
       << odometry_buffer.orientation.y << " "
-      << odometry_buffer.orientation.z << " ";
+      << odometry_buffer.orientation.z << " "
+      << odometry_buffer.time.sec << " "
+      << odometry_buffer.time.nsec << " "
+      << time_stamp << " ";
 
     for(size_t idx = 0; idx < 36; ++idx) {
       *(this->log_file_) << odometry_buffer.pose_covariance[idx];

@@ -20,10 +20,19 @@ namespace snapdragon_camera {
       double z;
     };
 
+    struct Time {
+      uint32_t sec;
+      uint32_t nsec;
+    };
+
+    // Data from ROS message
     Vector3D position;
     Vector3D velocity;
     Quaternion orientation;
     Vector3D angular_rate;
+
+    // Time stamp from ROS message
+    Time time;
 
     // 36-element, row-major covariance
     double pose_covariance[36];

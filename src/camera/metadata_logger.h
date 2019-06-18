@@ -30,7 +30,7 @@ namespace snapdragon_camera {
       ~MetadataLogger();
 
       // Write a new metadata line to the log file
-      void Log(const std::string& frame_file_name) const;
+      void Log(const std::string& frame_file_name, const uint64_t& time_stamp) const;
 
     private:
       Options options_;

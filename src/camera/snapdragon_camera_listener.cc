@@ -36,7 +36,10 @@ namespace snapdragon_camera {
     const std::string frame_file_name = this->options_.frame_output_manager->FrameFileName();
     const std::string frame_file_path = this->options_.frame_output_manager->FrameFilePath();
 
-    this->options_.metadata_logger->Log(frame_file_name);
+    // Include the image time stamp in the metadata log. The time stamp is
+    // poorly documented and only mentioned in the Snapdragon Linux Camera
+    // Interface document. I believe it is based on a monotonic clock.
+    this->options_.metadata_logger->Log(frame_file_name, frame->timeStamp);
     this->options_.image_saver->SaveImage(frame, frame_file_path);
 
     this->options_.frame_output_manager->Increment();
