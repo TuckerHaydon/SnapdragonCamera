@@ -14,12 +14,13 @@ bottom of images.
 - A 4k raw image is ~12 MB.
 
 ## Disk throughput
-The measured throughput performance of the disk is ~20MB/second. Given a raw
-image size of ~12 MB, only ~1.5 raw images per second can be saved to disk. 
+The measured throughput performance of the disk is between 15-40MB/second,
+depending on CPU usage. Given a raw image size of ~12 MB, only ~1-3 raw images
+per second can be saved to disk. 
 
-Measure throughput with the following script:
+Measure throughput of ~12MB image with the following script:
 ```bash
-dd if=/dev/zero of=/tmp/test1.img bs=1G count=1 oflag=dsync
+dd if=/dev/zero of=/tmp/test1.img bs=12M count=100 oflag=dsync
 ```
 
 ## Snapdragon Camera Linux Interface Specification
