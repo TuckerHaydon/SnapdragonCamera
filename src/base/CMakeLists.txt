@@ -3,6 +3,7 @@ set(TARGET lib_base)
 set(SOURCE_FILES
   odometry_buffer_sentry.cc
   moving_average.cc
+  odometry_circular_buffer.cc
 )
 
 add_library(${TARGET} STATIC ${SOURCE_FILES})

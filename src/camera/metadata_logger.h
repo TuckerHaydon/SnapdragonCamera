@@ -7,6 +7,7 @@
 #include <fstream>
 
 #include "odometry_buffer_sentry.h"
+#include "odometry_circular_buffer.h"
 
 namespace snapdragon_camera {
   class MetadataLogger {
@@ -18,6 +19,8 @@ namespace snapdragon_camera {
         std::string log_file_directory = "";
         // Name of log file
         std::string log_file_name = "metadata.log";
+        // OdometryCircularBuffer options
+        OdometryCircularBuffer::Options odometry_circular_buffer_options;
 
         Options() {}
         void Check();
@@ -34,8 +37,9 @@ namespace snapdragon_camera {
 
     private:
       Options options_;
-
       // Pointer to log file stream
       std::shared_ptr<std::ofstream> log_file_;
+      // OdometryCircularBuffer
+      std::shared_ptr<OdometryCircularBuffer> odometry_circular_buffer_;
   };
 }

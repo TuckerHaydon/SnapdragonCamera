@@ -3,6 +3,7 @@
 #pragma once
 
 #include <vector>
+#include <cstdint>
 
 namespace snapdragon_camera {
   // POD struct containing odometry data

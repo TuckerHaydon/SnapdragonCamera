@@ -10,6 +10,7 @@
 #include <grp.h>
 #include <pwd.h>
 #include <unistd.h>
+#include <cstring>
 
 namespace snapdragon_camera {
 
@@ -47,6 +48,10 @@ namespace snapdragon_camera {
   MetadataLogger::MetadataLogger(const Options& options)
     : options_(options) {
     this->options_.Check();
+
+    // Create odometry circular buffer
+    this->odometry_circular_buffer_ 
+      = std::make_shared<OdometryCircularBuffer>(this->options_.odometry_circular_buffer_options);
 
     // Create log file
     const std::string log_file_path = this->options_.log_file_directory + this->options_.log_file_name;
@@ -90,25 +95,36 @@ namespace snapdragon_camera {
 
   void MetadataLogger::Log(const std::string& frame_file_name, const uint64_t& time_stamp) const {
     // Retrieve most recent pose
-    OdometryBuffer odometry_buffer;
-    this->options_.odometry_buffer_sentry->Read(odometry_buffer);
+    OdometryBuffer recent_odometry_buffer;
+    this->options_.odometry_buffer_sentry->Read(recent_odometry_buffer);
+
+    // Cycle the circular buffer and retrieve the synchonized odom data
+    OdometryBuffer synchronized_odometry_buffer;
+    bool synchronized = this->odometry_circular_buffer_->Cycle(recent_odometry_buffer, synchronized_odometry_buffer);
+
+    // If not yet synchronized, write comment line with a zero'd out odom buffer
+    if(false == synchronized) {
+      std::memset(&synchronized_odometry_buffer, 0, sizeof(synchronized_odometry_buffer));  
+      *(this->log_file_) << "# ";
+    }
 
     // Log data
     *(this->log_file_)
       << frame_file_name << " "
-      << odometry_buffer.position.x << " "
-      << odometry_buffer.position.y << " "
-      << odometry_buffer.position.z << " "
-      << odometry_buffer.orientation.w << " "
-      << odometry_buffer.orientation.x << " "
-      << odometry_buffer.orientation.y << " "
-      << odometry_buffer.orientation.z << " "
-      << odometry_buffer.time.sec << " "
-      << odometry_buffer.time.nsec << " "
+      << synchronized_odometry_buffer.position.x << " "
+      << synchronized_odometry_buffer.position.y << " "
+      << synchronized_odometry_buffer.position.z << " "
+      << synchronized_odometry_buffer.orientation.w << " "
+      << synchronized_odometry_buffer.orientation.x << " "
+      << synchronized_odometry_buffer.orientation.y << " "
+      << synchronized_odometry_buffer.orientation.z << " "
+      << synchronized_odometry_buffer.time.sec << " "
+      << synchronized_odometry_buffer.time.nsec << " "
       << time_stamp << " ";
 
+    // 36 element pose covariance
     for(size_t idx = 0; idx < 36; ++idx) {
-      *(this->log_file_) << odometry_buffer.pose_covariance[idx];
+      *(this->log_file_) << synchronized_odometry_buffer.pose_covariance[idx];
       if(35 != idx) {
         *(this->log_file_) << " ";
       }
